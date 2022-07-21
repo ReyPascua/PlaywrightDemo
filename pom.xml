@@ -7,7 +7,7 @@
     <groupId>org.example</groupId>
     <artifactId>examples</artifactId>
     <version>0.1-SNAPSHOT</version>
-    <name>Playwright Client Examples</name>
+    <name>PlaywrightDemo</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
