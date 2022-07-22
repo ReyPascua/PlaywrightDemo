@@ -5,6 +5,8 @@ import com.accesshq.Models.MenuPage;
 import com.microsoft.playwright.*;
 import org.junit.jupiter.api.*;
 
+import java.awt.*;
+
 public class FormsTestSuite {
     Page page;
     @BeforeEach
@@ -31,6 +33,7 @@ public class FormsTestSuite {
         form.clickSubmit();
 
         //Assert
+        page.waitForSelector("[aria-live=polite]");
         Assertions.assertTrue(page.locator("text=Thanks for your feedback Test User").isVisible());
     }
     @Test
