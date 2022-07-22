@@ -27,8 +27,22 @@ public class PlanetsTestSuite {
         planetPage.clickEarth();
 
         //assert
-            Assertions.assertTrue(page.locator("text=Exploring Earth").isVisible());
+        Assertions.assertTrue(page.locator("text=Exploring Earth").isVisible());
     }
+
+    @Test
+    public void testFarthestPlanet(){
+        //arrange
+        PlanetPage planetPage = new PlanetPage(page);
+
+        //act
+        planetPage.clickNeptune();
+
+        //assert
+        Assertions.assertTrue(page.locator("text=Exploring Neptune").isVisible());
+        Assertions.assertEquals("4495000",String.valueOf(planetPage.getFarthestDistance()));
+    }
+
 
     @AfterEach
     public void tearDown(){
