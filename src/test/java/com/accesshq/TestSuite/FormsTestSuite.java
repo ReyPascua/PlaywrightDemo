@@ -16,14 +16,14 @@ public class FormsTestSuite {
                 launch(new BrowserType.LaunchOptions().setHeadless(false));
         BrowserContext context = browser.newContext();
         page = context.newPage();
+        MenuPage menu = new MenuPage(page);
+        menu.selectMenu("forms");
     }
 
     @Test
     public void modernFormSuccessTest(){
         //Arrange
-        MenuPage menu = new MenuPage(page);
         FormPage form = new FormPage(page);
-        menu.selectMenu("forms");
         form.enterName("Test User");
         form.enterEmail("testuser@accesshq.com");
         form.clickState("NSW");
@@ -39,9 +39,7 @@ public class FormsTestSuite {
     @Test
     public void modernFormFailureTest(){
         //Arrange
-        MenuPage menu = new MenuPage(page);
         FormPage form = new FormPage(page);
-        menu.selectMenu("forms");
 
         //Act
         form.clickSubmit();
