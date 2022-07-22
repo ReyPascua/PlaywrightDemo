@@ -5,8 +5,6 @@ import com.accesshq.Models.MenuPage;
 import com.microsoft.playwright.*;
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class FormsTestSuite {
     Page page;
     @BeforeEach
