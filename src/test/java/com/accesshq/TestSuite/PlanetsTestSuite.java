@@ -1,4 +1,5 @@
 package com.accesshq.TestSuite;
+import com.accesshq.Models.MenuPage;
 import com.accesshq.Models.PlanetPage;
 import com.microsoft.playwright.*;
 import org.junit.jupiter.api.*;
@@ -14,8 +15,8 @@ public class PlanetsTestSuite {
     BrowserContext context = browser.newContext(new Browser.NewContextOptions().
             setViewportSize(1300, 600));
     page = context.newPage();
-    page.navigate("https://d18u5zoaatmpxx.cloudfront.net/#/");
-    page.locator("text=personHomeFormsPlanets >> [aria-label=\"planets\"]").click();
+    MenuPage menu = new MenuPage(page);
+    menu.selectMenu("planets");
     }
 
     @Test
