@@ -1,19 +1,37 @@
 package com.accesshq.Models;
-import com.microsoft.playwright.ElementHandle;
-import com.microsoft.playwright.Page;
+
+import com.microsoft.playwright.*;
+import java.io.FileNotFoundException;
+import java.util.List;
 
 public class PlanetPage {
-    Page page;
+    private final Page page;
+    private List<ElementHandle> getAllPlanets;
     public PlanetPage(Page page){
         this.page = page;
+        this.getAllPlanets = page.querySelectorAll(".planet");
     }
 
-    public void clickEarth(){
-        page.locator("text=EarthDistance from the sun149,600,000 kmRadius6,371 kmExplore >> button").click();
+    public ElementHandle getPlanetCard(String planetName) throws FileNotFoundException {
+        for(ElementHandle p: getAllPlanets){
+            String title = p.querySelector("h2").innerText();
+            if(title.equalsIgnoreCase(planetName)){
+                return p;
+            }
+        }
+        throw new FileNotFoundException();
     }
 
-    public void clickNeptune(){
-        page.locator("text=NeptuneDistance from the sun4,495,000 kmRadius24,622 kmExplore >> button").click();
+    public void clickExploreButton(String planetTitle) throws FileNotFoundException {
+         getPlanetCard(planetTitle).querySelector("\"Explore\"").click();
+    }
+
+    public String getTitle(String planetTitle) throws FileNotFoundException {
+        return getPlanetCard(planetTitle).querySelector(".name.headline.primary--text").innerHTML();
+    }
+
+    public String getDistance(String planetTitle) throws FileNotFoundException {
+        return getPlanetCard(planetTitle).querySelector(".distance").innerHTML().replaceAll("\\D", "");
     }
 
     public Long getFarthestDistance() {
