@@ -4,6 +4,8 @@ import com.accesshq.Models.PlanetPage;
 import com.microsoft.playwright.*;
 import org.junit.jupiter.api.*;
 
+import java.io.FileNotFoundException;
+
 public class PlanetsTestSuite {
     Page page;
     Browser browser;
@@ -12,36 +14,35 @@ public class PlanetsTestSuite {
     Playwright playwright = Playwright.create();
     browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
             .setHeadless(false).setSlowMo(50));
-    BrowserContext context = browser.newContext(new Browser.NewContextOptions().
-            setViewportSize(1300, 600));
+    BrowserContext context = browser.newContext(new Browser.NewContextOptions());
     page = context.newPage();
     MenuPage menu = new MenuPage(page);
     menu.selectMenu("planets");
     }
 
     @Test
-    public void TestPlanetEarth(){
+    public void TestPlanetEarth() throws FileNotFoundException {
         //arrange
         PlanetPage planetPage = new PlanetPage(page);
 
         //act
-        planetPage.clickEarth();
+        planetPage.clickExploreButton("Earth");
 
         //assert
-        Assertions.assertTrue(page.locator("text=Exploring Earth").isVisible());
+        Assertions.assertEquals("Earth", planetPage.getTitle("Earth"));
+        Assertions.assertEquals("Exploring Venus", page.locator(".snackbar.popup-message.mr-auto").innerText());
     }
 
     @Test
-    public void testFarthestPlanet(){
+    public void testFarthestPlanet() throws FileNotFoundException {
         //arrange
         PlanetPage planetPage = new PlanetPage(page);
 
         //act
-        planetPage.clickNeptune();
+        planetPage.clickExploreButton("Neptune");
 
         //assert
-        Assertions.assertTrue(page.locator("text=Exploring Neptune").isVisible());
-        Assertions.assertEquals("4495000",String.valueOf(planetPage.getFarthestDistance()));
+        Assertions.assertEquals(planetPage.getDistance("Neptune"), String.valueOf(planetPage.getFarthestDistance()));
     }
 
 
