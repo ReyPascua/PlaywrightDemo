@@ -1,28 +1,29 @@
 package com.accesshq.TestSuite;
 
 import com.accesshq.Models.FormPage;
-import com.accesshq.Models.MenuPage;
+import com.accesshq.Models.MenuBar;
 import com.microsoft.playwright.*;
 import org.junit.jupiter.api.*;
 
-import java.awt.*;
-
 public class FormsTestSuite {
     Page page;
+    MenuBar menu;
+    Browser browser;
     @BeforeEach
     public void startup() {
         Playwright playwright = Playwright.create();
-        Browser browser = playwright.chromium().
+        browser = playwright.chromium().
                 launch(new BrowserType.LaunchOptions().setHeadless(false));
         BrowserContext context = browser.newContext();
         page = context.newPage();
-        MenuPage menu = new MenuPage(page);
-        menu.selectMenu("forms");
+        menu = new MenuBar(page);
+        page.navigate("https://d18u5zoaatmpxx.cloudfront.net/#/");
     }
 
     @Test
     public void modernFormSuccessTest(){
         //Arrange
+        menu.goToPage("forms");
         FormPage form = new FormPage(page);
         form.enterName("Test User");
         form.enterEmail("testuser@accesshq.com");
@@ -39,6 +40,7 @@ public class FormsTestSuite {
     @Test
     public void modernFormFailureTest(){
         //Arrange
+        menu.goToPage("forms");
         FormPage form = new FormPage(page);
 
         //Act
@@ -48,5 +50,9 @@ public class FormsTestSuite {
         Assertions.assertTrue(page.locator("text=Your name is required").isVisible());
         Assertions.assertTrue(page.locator("text=Your email is required").isVisible());
         Assertions.assertTrue(page.locator("text=You must agree to continue").isVisible());
+    }
+    @AfterEach
+    public void tearDown(){
+        browser.close();
     }
 }
