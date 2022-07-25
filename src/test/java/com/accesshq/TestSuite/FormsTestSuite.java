@@ -67,7 +67,7 @@ public class FormsTestSuite {
 
         //Assert
         Assertions.assertEquals("", form.getInputField("address").innerText());
-        Assertions.assertEquals("M", page.locator("select#gender").inputValue());
+        Assertions.assertEquals("", page.locator("select#gender").inputValue());
 
     }
     @AfterEach
