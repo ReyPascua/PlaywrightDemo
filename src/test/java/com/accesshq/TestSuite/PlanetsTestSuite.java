@@ -1,5 +1,6 @@
 package com.accesshq.TestSuite;
 import com.accesshq.Models.MenuBar;
+import com.accesshq.Models.PlanetCard;
 import com.accesshq.Models.PlanetPage;
 import com.microsoft.playwright.*;
 import org.junit.jupiter.api.*;
@@ -22,32 +23,34 @@ public class PlanetsTestSuite {
     }
 
     @Test
-    public void TestPlanetEarth() throws FileNotFoundException {
+    public void testPlanetEarth() throws FileNotFoundException {
         //arrange
         menu.goToPage("planets");
-        PlanetPage planetPage = new PlanetPage(page);
+        PlanetCard planet = new PlanetPage(page).getPlanet(p->p.getPlanetName()
+                .equalsIgnoreCase("Earth"));
 
         //act
-        planetPage.clickExploreButton("Earth");
+        planet.clickExploreButton();
 
         //assert
-        Assertions.assertEquals("Earth", planetPage.getTitle("Earth"));
-        Assertions.assertEquals("Exploring Earth", page.locator(".snackbar.popup-message.mr-auto").innerText());
+        Assertions.assertEquals("Exploring Earth", page
+                .locator(".snackbar.popup-message.mr-auto").innerText());
     }
 
     @Test
     public void testFarthestPlanet() throws FileNotFoundException {
         //arrange
         menu.goToPage("planets");
-        PlanetPage planetPage = new PlanetPage(page);
+        PlanetCard planet = new PlanetPage(page).getPlanet(p->p.getPlanetName()
+                .equalsIgnoreCase("Neptune"));
 
         //act
-        planetPage.clickExploreButton("Neptune");
+        planet.clickExploreButton();
 
         //assert
-        Assertions.assertEquals(planetPage.getDistance("Neptune"), String.valueOf(planetPage.getFarthestDistance()));
+        Assertions.assertEquals(planet.getPlanetDistance(),
+                new PlanetPage(page).getFarthestDistance());
     }
-
 
     @AfterEach
     public void tearDown(){

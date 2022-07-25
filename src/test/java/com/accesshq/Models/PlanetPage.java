@@ -2,7 +2,9 @@ package com.accesshq.Models;
 
 import com.microsoft.playwright.*;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class PlanetPage {
     private final Page page;
@@ -12,26 +14,21 @@ public class PlanetPage {
         this.getAllPlanets = page.querySelectorAll(".planet");
     }
 
-    public ElementHandle getPlanetCard(String planetName) throws FileNotFoundException {
+    public List<PlanetCard> getAllPlanets(){
+        ArrayList<PlanetCard> result = new ArrayList<>();
         for(ElementHandle p: getAllPlanets){
-            String title = p.querySelector("h2").innerText();
-            if(title.equalsIgnoreCase(planetName)){
+            result.add(new PlanetCard(p));
+        }
+        return  result;
+    }
+
+    public PlanetCard getPlanet(Predicate<PlanetCard> logic) throws FileNotFoundException {
+        for(PlanetCard p: getAllPlanets()){
+            if(logic.test(p)){
                 return p;
             }
         }
         throw new FileNotFoundException();
-    }
-
-    public void clickExploreButton(String planetTitle) throws FileNotFoundException {
-         getPlanetCard(planetTitle).querySelector("\"Explore\"").click();
-    }
-
-    public String getTitle(String planetTitle) throws FileNotFoundException {
-        return getPlanetCard(planetTitle).querySelector(".name.headline.primary--text").innerHTML();
-    }
-
-    public String getDistance(String planetTitle) throws FileNotFoundException {
-        return getPlanetCard(planetTitle).querySelector(".distance").innerHTML().replaceAll("\\D", "");
     }
 
     public Long getFarthestDistance() {
@@ -44,4 +41,5 @@ public class PlanetPage {
         }
         return distance;
     }
+
 }
