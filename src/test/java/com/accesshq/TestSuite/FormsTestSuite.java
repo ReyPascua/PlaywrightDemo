@@ -13,7 +13,7 @@ public class FormsTestSuite {
     public void startup() {
         Playwright playwright = Playwright.create();
         browser = playwright.chromium().
-                launch(new BrowserType.LaunchOptions().setHeadless(false));
+                launch(new BrowserType.LaunchOptions().setHeadless(false).setSlowMo(500));
         BrowserContext context = browser.newContext();
         page = context.newPage();
         menu = new MenuBar(page);
@@ -25,8 +25,8 @@ public class FormsTestSuite {
         //Arrange
         menu.goToPage("forms");
         FormPage form = new FormPage(page);
-        form.enterName("Test User");
-        form.enterEmail("testuser@accesshq.com");
+        form.getInputField("name").fill("Test User");
+        form.getInputField("email").fill("testuser@accesshq.com");
         form.clickState("NSW");
         form.clickAgree();
 
@@ -50,6 +50,25 @@ public class FormsTestSuite {
         Assertions.assertTrue(page.locator("text=Your name is required").isVisible());
         Assertions.assertTrue(page.locator("text=Your email is required").isVisible());
         Assertions.assertTrue(page.locator("text=You must agree to continue").isVisible());
+    }
+
+    @Test
+    public void testTraditionalForm(){
+        //Arrange
+        menu.goToPage("forms");
+        FormPage form = new FormPage(page);
+        form.clickFormType("Traditional");
+
+        //Act
+        form.getInputField("address").fill("sample address");
+        form.selectGender("Male");
+        form.clickAllow();
+        form.clickReset();
+
+        //Assert
+        Assertions.assertEquals("", form.getInputField("address").innerText());
+        Assertions.assertEquals("M", page.locator("select#gender").inputValue());
+
     }
     @AfterEach
     public void tearDown(){

@@ -6,13 +6,15 @@ public class FormPage {
     Page page;
     public FormPage(Page page) { this.page = page; }
 
-    public void enterName(String name){
-        page.locator("input[name=\"name\"]").fill(name);
+    public void clickFormType(String formName){
+        page.locator("text= "+formName+" ").click();
     }
 
-    public void enterEmail(String email){
-        page.locator("input[name=\"email\"]").fill(email);
+    public Locator getInputField(String inputName){
+        return page.locator("input#"+inputName);
     }
+
+    //Modern
 
     public void clickState(String state){
         page.locator("div[role=\"button\"]:has-text(\"Statearrow_drop_down\")").click();
@@ -26,4 +28,20 @@ public class FormPage {
     public void clickSubmit(){
         page.locator("button:has-text(\"submit\")").click();
     }
+
+    //Traditional
+
+    public void selectGender(String gender){
+        page.locator("select#gender").selectOption(String.valueOf(gender.charAt(0)));
+    }
+
+    public void clickAllow(){
+            page.locator("#allow").check();
+    }
+
+    public void clickReset(){
+        page.locator("input:has-value(\"Reset\")");
+    }
+
+
 }
